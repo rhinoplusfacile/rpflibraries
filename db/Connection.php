@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2014 Rhino Plus Facile <code at rhinopl.us>
  *
@@ -18,14 +17,23 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace entity;
+namespace rhinoplusfacile\db;
 
 /**
- * Description of AccessibleEntity.
+ * Description of Connection.
  *
  * @author Rhino Plus Facile <code at rhinopl.us>
  */
-class AccessibleEntity
+interface Connection
 {
-    //put your code here
+    /**
+     * @return \rhinoplusfacile\db\Query
+     */
+    public function getQueryObject();
+    /**
+     *
+     * @param \rhinoplusfacile\db\Query $query
+     * @return \rhinoplusfacile\db\Result
+     */
+    public function runQuery(Query $query);
 }

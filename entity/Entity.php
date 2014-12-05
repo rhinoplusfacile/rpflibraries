@@ -1,5 +1,4 @@
 <?php
-
 /*
  * Copyright (C) 2014 Rhino Plus Facile <code at rhinopl.us>
  *
@@ -18,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-namespace entity;
+namespace rhinoplusfacile\entity;
 
 /**
  * Description of Entity.
@@ -27,6 +26,7 @@ namespace entity;
  */
 abstract class Entity
 {
+
     /** @var mixed */
     private $id;
 
@@ -34,8 +34,12 @@ abstract class Entity
      * Constructor
      * @param mixed $id defaults to null
      */
-    public function __construct($id=null)
+    public function __construct($id = null)
     {
+        if(!isset($id))
+        {
+            $id = spl_object_hash($this);
+        }
         $this->id = $id;
     }
 
@@ -57,4 +61,5 @@ abstract class Entity
     {
         $this->id = $new;
     }
+
 }
