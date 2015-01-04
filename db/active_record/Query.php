@@ -18,60 +18,45 @@
 
 namespace rhinoplusfacile\db\active_record;
 
-use \rhinoplusfacile\db\Query as BaseQuery;
-
 /**
  * Description of Query.
  *
  * @author Rhino Plus Facile <code at rhinopl.us>
  */
-abstract class Query extends BaseQuery
+abstract class Query extends \rhinoplusfacile\db\Query
 {
 
-    /** @var \rhinoplusfacile\db\active_record\SelectList */
-    private $select_list;
-    private $set_list;
+    protected $selects = array();
 
-    /**
-     * Add an item or items to the SELECT list.  If this function is called multiple times it should add additional items, with whether or not to escape them determined by $escape.
-     * @param mixed $items
-     * @param bool $escape
-     */
-    public function select(array $items)
+    public function select($item, $alias = null, $escape = true)
     {
-        
+        $this->selects[] = new \rhinoplusfacile\db\active_record\SelectItem($item, $alias, $escape);
+        return $this;
     }
 
-    public function set($item, $value)
+    abstract public function set($item, $value);
+
+    abstract public function insert();
+
+    abstract public function update();
+
+    abstract public function delete();
+
+    abstract public function from($tables);
+
+    abstract public function join($table, $condition, $type = 'left');
+
+    abstract public function where($condition);
+
+    protected function parseSelects()
     {
-
-    }
-
-    public function insert();
-
-    public function update();
-
-    public function delete();
-
-    /**
-     * Add a table or tables to the query (can be used for INSERTs and UPDATES as well).  If this function is called multiple times it should add additional tables.
-     * @param mixed $tables
-     */
-    public function from($tables);
-
-    /**
-     * Add a JOIN, type determined by $type, ON $condition.
-     * @param mixed $table
-     * @param mixed $condition
-     * @param mixed $type
-     */
-    public function join($table, $condition, $type = 'left');
-
-    public function where($condition);
-
-    public function getText()
-    {
-        return parent::getText();
+        $sels = array();
+        foreach($this->selects as $item)
+        {
+            $item->escape($this->getHandle()->escape);
+            $sels[] = (string)$item;
+        }
+        return $sels;
     }
 
 }

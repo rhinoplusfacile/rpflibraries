@@ -33,7 +33,7 @@ class ValidatorEntry
     public function __construct($name, &$member, $validate = '')
     {
         $this->name = $name;
-        $this->member &= $member;
+        $this->member = &$member;
         $this->validate = ($validate ? $validate : 'set');
     }
 

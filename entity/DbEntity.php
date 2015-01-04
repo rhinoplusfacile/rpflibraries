@@ -42,11 +42,11 @@ abstract class DbEntity extends Entity
      * @param mixed $id
      * @param Connection $db
      */
-    public function __construct($id = null, Connection $db)
+    public function __construct($id = null)
     {
         parent::__construct($id);
-        $this->db = $db;
-        $this->validator = new Validator;
+        $this->db = \rhinoplusfacile\di\DI::create('rhinoplusfacile\db\Connection');
+        $this->validator = \rhinoplusfacile\di\DI::create('rhinoplusfacile\validator\Validator');
     }
 
     /**

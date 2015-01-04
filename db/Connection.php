@@ -26,14 +26,12 @@ namespace rhinoplusfacile\db;
  */
 interface Connection
 {
+
+    public function __construct($host, $user, $password, $database,
+            $port = null, $socket = null);
+
     /**
      * @return \rhinoplusfacile\db\Query
      */
     public function getQueryObject();
-    /**
-     *
-     * @param \rhinoplusfacile\db\Query $query
-     * @return \rhinoplusfacile\db\Result
-     */
-    public function runQuery(Query $query);
 }

@@ -46,7 +46,7 @@ class Validator
      */
     public function add($name, &$member, $validate = '')
     {
-        $entry = new ValidatorEntry($name, $member, $validate);
+        $entry = \rhinoplusfacile\di\DI::create('rhinoplusfacile\validator\ValidatorEntry', $name, $member, $validate);
         $this->entries[$name] = $entry;
     }
 

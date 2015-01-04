@@ -33,9 +33,10 @@ class DbCollection extends EntityCollection
     /** @var string set in subclass */
     protected $collected_class;
 
-    public function __construct($id = null, \rhinoplusfacile\db\Connection $db)
+    public function __construct($id = null)
     {
         parent::__construct($id);
+        $this->db = \rhinoplusfacile\di\DI::create('rhinoplusfacile\db\Connection');
     }
 
     public function loadAll()
@@ -48,7 +49,7 @@ class DbCollection extends EntityCollection
     {
         foreach($result as $row)
         {
-            $item = new $this->collected_class;
+            $item = \rhinoplusfacile\di\DI::create($this->collected_class);
             $item->processResult($row);
             $this[] = $item;
         }

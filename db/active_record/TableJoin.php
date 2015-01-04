@@ -16,53 +16,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace rhinoplusfacile\db;
+namespace rhinoplusfacile\db\active_record;
 
 /**
- * Description of Query.
+ * Description of TableJoin.
  *
  * @author Rhino Plus Facile <code at rhinopl.us>
  */
-abstract class Query
+class TableJoin implements Escapable
 {
 
     use \rhinoplusfacile\entity\AutoAccessible;
 
-    private $handle;
-    private $result;
-    private $text = '';
+    private $name;
+    private $alias = null;
+    private $join_type = null;
+    private $condition = null;
 
-    public function __construct($handle)
+    public function __construct($name, $alias = null, $join_type = null,
+            $condition = null)
     {
-        $this->handle = $handle;
-
-        $this->addMember('handle', true, true);
-        $this->addMember('result', true, false);
+        $this->name = $name;
+        $this->addMember('name', true, false);
+        $this->alias = $alias;
+        $this->addMember('alias', true, false);
+        $this->join_type = $join_type;
+        $this->condition = $condition;
+        $this->addMember('condition', true, false);
     }
 
-    /**
-     * Wipes out the query and sets it to run whatever SQL command is contained in the text.
-     * @param string $text
-     * @return \rhinoplusfacile\db\Query return $this
-     */
-    public function setText($text)
+    public function getJoinType()
     {
-        $this->text = $text;
-        return $this;
+        return strtoupper($this->join_type);
     }
 
-    /**
-     * Gets SQL, in a string, for whatever command this query has formed.
-     * @return string
-     */
-    public function getText()
+    public function escape(callable $escape_function)
     {
-        return $this->text;
+        $this->name = $escape_function($this->name);
+        $this->alias = $escape_function($this->alias);
     }
 
-    public function execute()
-    {
-        $this->result = $this->handle->query($this->text);
-    }
-
+//put your code here
 }
