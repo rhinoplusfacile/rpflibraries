@@ -79,12 +79,9 @@ class Query extends \rhinoplusfacile\db\active_record\Query
                 $table->escape($this->handle->escape);
                 if($table->join_type)
                 {
-                    $joins =                }
-            }
-        }
-        else
-        {
 
+                }
+            }
         }
     }
 

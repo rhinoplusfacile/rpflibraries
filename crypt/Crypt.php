@@ -27,34 +27,32 @@ class Crypt
 {
 
     private $key;
+    private $iv_size;
 
     public function __construct($key)
     {
-        $this->key = hash('sha256', $key, true);
+        $this->key = $key;
+        $this->iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
     }
 
     public function encrypt($message)
     {
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+        $iv = mcrypt_create_iv($this->iv_size, MCRYPT_RAND);
 
         $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $this->key, $message, MCRYPT_MODE_CBC, $iv);
-
         $ciphertext = $iv . $ciphertext;
 
         return base64_encode($ciphertext);
     }
 
-    public function decrypt($cypertext)
+    public function decrypt($ciphertext)
     {
         $ciphertext_dec = base64_decode($ciphertext);
 
-        $iv_size = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_CBC);
-        $iv_dec = substr($ciphertext_dec, 0, $iv_size);
+        $iv_dec = substr($ciphertext_dec, 0, $this->iv_size);
+        $ciphertext_dec = substr($ciphertext_dec, $this->iv_size);
 
-        $ciphertext_dec = substr($ciphertext_dec, $iv_size);
-
-        return mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec);
+        return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $this->key, $ciphertext_dec, MCRYPT_MODE_CBC, $iv_dec), "\0");
     }
 
 }
